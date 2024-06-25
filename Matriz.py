@@ -14,17 +14,27 @@ class Matriz:
             for y in range(self.coluna):
                 linha.append(Cell(0)) 
             self.lifeMatriz.append(linha)
-        # print(self.lifeMatriz)
         
-    def clique_botao(self, i, j):
-        print(f'Clicou em ({i},{j})')
+    def clickButton(self, linha, coluna):
+        button = self.matriz[linha][coluna]
+        valor = not Cell.getLife(self.lifeMatriz[linha][coluna])
+        Cell.setLife(self.lifeMatriz[linha][coluna], valor)
+        if valor:
+            button.configure(style='blue.TButton')
+        else:
+            button.configure(style='gray.TButton')
+            
             
     def criarMatriz(self, janela, linhas, colunas):
         matriz = []
+        style = ttk.Style()
+        style.configure("gray.TButton", background="light gray")
+        style.configure("blue.TButton", background="light blue")
+        
         for i in range(linhas):
             linha = []
             for j in range(colunas):
-                button = ttk.Button(janela, text=f'({i},{j})', command=lambda x=i, y=j: self.clique_botao(x, y))
+                button = ttk.Button(janela, text=f'({i},{j})',  style='gray.TButton', command=lambda linha=i, coluna=j: self.clickButton(linha, coluna))
                 button.grid(row=i, column=j)
                 linha.append(button)
             matriz.append(linha)
@@ -32,6 +42,6 @@ class Matriz:
 
 if __name__ == "__main__":
     janela = tk.Tk()
-    janela.title("Matriz usando ttk")
+    janela.title("Life Game")
     Matriz(janela)
     janela.mainloop()
